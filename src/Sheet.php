@@ -5,7 +5,7 @@
  * Date: 2019/6/18
  * Time: 11:21
  */
-//namespace Fan1992\Phpspreadsheet;
+namespace Fan1992\Phpspreadsheet;
 
 class Sheet
 {
@@ -321,13 +321,13 @@ class Sheet
     {
         switch ($type) {
             case self::TYPE_XLSX:
-                $this->writer = new PhpOffice\PhpSpreadsheet\Writer\Xlsx($this->spreadsheets);
+                $this->writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($this->spreadsheets);
                 break;
             case self::TYPE_XLS:
-                $this->writer = new PhpOffice\PhpSpreadsheet\Writer\Xlsx($this->spreadsheets);
+                $this->writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($this->spreadsheets);
                 break;
             case self::TYPE_CSV:
-                $this->writer = new PhpOffice\PhpSpreadsheet\Writer\Csv($this->spreadsheets);
+                $this->writer = new \PhpOffice\PhpSpreadsheet\Writer\Csv($this->spreadsheets);
                 break;
             default:
                 throw new \Exception('不支持的导出格式');
@@ -414,22 +414,22 @@ class Sheet
     {
         switch (strtolower($type)) {
             case 'xls':
-                $this->reader = new PhpOffice\PhpSpreadsheet\Reader\Xls();
+                $this->reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
                 break;
             case 'xlsx':
-                $this->reader = new PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+                $this->reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
                 break;
             case 'csv':
-                $this->reader = new PhpOffice\PhpSpreadsheet\Reader\Csv();
+                $this->reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
                 break;
             case 'ods':
-                $this->reader = $reader = new PhpOffice\PhpSpreadsheet\Reader\Ods();
+                $this->reader = new \PhpOffice\PhpSpreadsheet\Reader\Ods();
                 break;
             case 'slk':
                 $this->reader = new \PhpOffice\PhpSpreadsheet\Reader\Slk();
                 break;
             case 'gnumeric':
-                $this->reader = new PhpOffice\PhpSpreadsheet\Reader\Gnumeric();
+                $this->reader = new \PhpOffice\PhpSpreadsheet\Reader\Gnumeric();
                 break;
             default:
                 throw new \Exception('不支持的格式');

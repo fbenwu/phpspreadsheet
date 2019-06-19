@@ -1,0 +1,21 @@
+{
+    "name": "fan1992/phpspreadsheet",
+    "description": "phpspreadsheet",
+    "type": "library",
+    "require": {
+        "phpoffice/phpspreadsheet": "1.7"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "wuf",
+            "email": "1094947298@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Fan1992\\Phpspreadsheet\\": "src/"
+        }
+    }
+}

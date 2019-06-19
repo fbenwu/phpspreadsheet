@@ -4,15 +4,15 @@ phpspreadshhet 读取，导出
 # 安装
         composer require fan1992/phpspreadsheet
 # 实例化
-        use Fan1992\Phpspreadsheet\Sheet;
-        $sheet = new Sheet();
+        use Fan1992\Phpspreadsheet\Excel;
+        $excel = new Excel();
         
 # 读取文档
-        $data = $sheet->read('./test.xlsx');
+        $data = $excel->read('./test.xlsx');
         print_r($data);
 # 一次读取多个sheet
-        $sheet->sheetNames = ['data_a'=>'表1','data_b'=>'表2','data_c'=>'Sheet3'];
-        $data = $sheet->read('./test.xlsx');
+        $excel->sheetNames = ['data_a'=>'表1','data_b'=>'表2','data_c'=>'Sheet3'];
+        $data = $excel->read('./test.xlsx');
         print_r($data);
         
 # 导出
@@ -22,9 +22,9 @@ phpspreadshhet 读取，导出
             ['撒发顺丰的', ['1','23','撒旦法师'], '2019-06-19', 'asdasdfas']
         ];
         $width = [30,0,40,60]; //列宽度，为0或没有则自动适应
-        $sheet->export($data, $header,'test'.time(),null, 'mysheet', $width);
+        $excel->export($data, $header,'test'.time(),null, 'mysheet', $width);
 # 导出多个sheet
-        $sheet1Data = [
+        $excel1Data = [
             'data'      => [
                 ['12', ['阿斯顿发', 'asdf', '2019-06-19'], '是的', '沙箱'],
                 ['asd', ['阿斯顿发', '22', '2019-06-19'], '是', '沙asdf箱'],
@@ -33,7 +33,7 @@ phpspreadshhet 读取，导出
             'sheetName' => '1211sheet1',
             'width'     => [5, 0, 5]
         ];
-        $sheet2Data = [
+        $excel2Data = [
             'data'      => [
                 ['12', ['阿斯顿发', 'asdf', '2019-06-19'], '是的', '沙箱'],
                 ['asd', ['阿斯顿发', '22', '2019-06-19'], '是', '沙asdf箱'],
@@ -42,7 +42,7 @@ phpspreadshhet 读取，导出
             'sheetName' => '',
             'width'     => []
         ];
-        $sheet3Data = [
+        $excel3Data = [
             'data'      => [
                 ['12', ['阿斯顿发', 'asdf', '2019-06-19'], '是的', '沙333箱'],
                 ['asd', ['阿斯顿发', '22', '2019-06-19'], '是3333', '沙asdf箱'],
@@ -51,8 +51,8 @@ phpspreadshhet 读取，导出
             'sheetName' => '导出sheet3',
             'width'     => []
         ];
-        $data       = [$sheet1Data, $sheet2Data, $sheet3Data];
-        $sheet->mutiSheetExport($data, 'muti' . time(), Sheet::TYPE_XLSX);
+        $data       = [$excel1Data, $excel2Data, $excel3Data];
+        $excel->mutiSheetExport($data, 'muti' . time(), Sheet::TYPE_XLSX);
         
 # 其它
         $readFirstLine = false;//是否读取首行

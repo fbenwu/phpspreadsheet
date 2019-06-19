@@ -10,7 +10,7 @@
 
 namespace Fan1992\Phpspreadsheet;
 
-class Sheet
+class Excel
 {
     const TYPE_XLS = 'xls'; // 导出类型 xls
     const TYPE_XLSX = 'xlsx'; // 导出类型 xlsx
@@ -305,9 +305,6 @@ class Sheet
             case self::TYPE_XLS:
                 $this->writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($this->spreadsheets);
                 break;
-            case self::TYPE_CSV:
-                $this->writer = new \PhpOffice\PhpSpreadsheet\Writer\Csv($this->spreadsheets);
-                break;
             default:
                 throw new \Exception('不支持的导出格式');
         }
@@ -317,7 +314,7 @@ class Sheet
      * @param $file 文件名称，包含路径
      * @return array
      * @throws Exception
-     * 读取表格文件，包括 xls，xlsx，csv，其他没有测试
+     * 读取表格文件，包括 xls，xlsx
      * 支持读一个文件里面的多个sheet
      */
     public function read($file)
@@ -373,7 +370,7 @@ class Sheet
         $highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn);
 
         $data = [];
-        for ($row = 1; $row <= $highestRow; $row++) {
+        for ($row = $this->readFirstLine ? 1 : 2; $row <= $highestRow; $row++) {
             $lineData = [];
             for ($col = 1; $col <= $highestColumnIndex; $col++) {
                 $lineData[] = $this->activesheet->getCellByColumnAndRow($col, $row)->getValue();
@@ -398,22 +395,9 @@ class Sheet
             case 'xlsx':
                 $this->reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
                 break;
-            case 'csv':
-                $this->reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
-                break;
-            case 'ods':
-                $this->reader = new \PhpOffice\PhpSpreadsheet\Reader\Ods();
-                break;
-            case 'slk':
-                $this->reader = new \PhpOffice\PhpSpreadsheet\Reader\Slk();
-                break;
-            case 'gnumeric':
-                $this->reader = new \PhpOffice\PhpSpreadsheet\Reader\Gnumeric();
-                break;
             default:
                 throw new \Exception('不支持的格式');
         }
     }
 }
 
-?>

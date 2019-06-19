@@ -1,17 +1,19 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: wufan
+ * User: fan
  * Date: 2019/6/18
  * Time: 11:21
+ * 因为每次处理表格文档都要花时间去找文档
+ * 干脆花时间自己整理一个常用的phpspreadsheet读取和导出操作的类
  */
 namespace Fan1992\Phpspreadsheet;
 
 class Sheet
 {
-    const TYPE_XLS = 'xls';
-    const TYPE_XLSX = 'xlsx';
-    const TYPE_CSV = 'csv';
+    const TYPE_XLS = 'xls'; // 导出类型 xls
+    const TYPE_XLSX = 'xlsx'; // 导出类型 xlsx
+    const TYPE_CSV = 'csv'; // 导出类型 csv
 
     public $filePath;
     public $readFirstLine = false;//是否读取首行
@@ -19,16 +21,15 @@ class Sheet
     public $readDataOnly = true; // 不区分日期
     public $sheetNames = null; // 需要读取的表格名
 
-    private $spreadsheets = null;
-    private $activesheet = null;
+    private $spreadsheets = null; // 文档对象
+    private $activesheet = null; //当前sheet
 
     private $reader = null; // Reader
     private $writer = null; // Writer
 
     public function __construct()
     {
-        // 官方的phpspreadsheet不知道为什么不能自动加载
-        require_once './../vendor/autoload.php';
+        set_time_limit(0); // 设置超时时间
     }
 
     /***
@@ -220,10 +221,8 @@ class Sheet
                 $j = intval($index + 1);
                 if (!is_array($value)) {
                     if ($rowspan > 1) {
-//                        $this->mergeCell($currentRow, $j, intval($currentRow + $rowspan - 1),$j);
                         $this->activesheet->mergeCellsByColumnAndRow($j, $currentRow, $j, intval($currentRow + $rowspan - 1));
                     }
-//                    $this->setCell($j, $currentRow, $value);
                     $this->activesheet->setCellValueByColumnAndRow($j, $currentRow, $value);
                     $this->setCellCenter($j, $currentRow);
                 } else {
@@ -232,22 +231,18 @@ class Sheet
                         if (!is_array($v)) {
                             if ($rows_division_arr) {
                                 if ($rows_division_arr[$k] > 1) {
-//                                    $this->mergeCell( $tem_column, $j, intval($tem_column + $rows_division_arr[$k] - 1),$j);
                                     $this->activesheet->mergeCellsByColumnAndRow($j, $tem_column, $j, intval($tem_column + $rows_division_arr[$k] - 1));
                                 }
-//                                $this->setCell($j, $tem_column, $v);
                                 $this->activesheet->setCellValueByColumnAndRow($j, $tem_column, $v);
                                 $this->setCellCenter($j, $tem_column);
                                 $tem_column += $rows_division_arr[$k];
                             } else {
-//                                $this->setCell($j, $tem_column, $v);
                                 $this->activesheet->setCellValueByColumnAndRow($j, $tem_column, $v);
                                 $this->setCellCenter($j, $tem_column);
                                 $tem_column++;
                             }
                         } else {
                             foreach ($v as $vv) {
-//                                $this->setCell($j, $tem_column, $vv);
                                 $this->activesheet->setCellValueByColumnAndRow($j, $tem_column, $vv);
                                 $this->setCellCenter($j, $tem_column);
                                 $tem_column++;
@@ -274,30 +269,6 @@ class Sheet
             ],
         ];
         $this->activesheet->getStyleByColumnAndRow($col, $row)->applyFromArray($styleArray);
-    }
-
-    /***
-     * @param $col1
-     * @param $row1
-     * @param $col2
-     * @param $row2
-     * 调试
-     */
-    private function mergeCell($col1, $row1, $col2, $row2)
-    {
-        echo '合并 ' . $col1 . '-' . $row1 . ' 至 ' . $col2 . '-' . $row2 . "<br />";
-    }
-
-    /***
-     * @param $col1
-     * @param $row1
-     * @param $v
-     * 调试
-     */
-    private function setCell($col1, $row1, $v)
-    {
-        print_r($v);
-        echo '设置 ' . $col1 . '-' . $row1 . ' 为 ' . $v . "<br />";
     }
 
     /***
@@ -391,7 +362,7 @@ class Sheet
     {
         $highestRow         = $this->activesheet->getHighestRow();  // 最大行数
         $highestColumn      = $this->activesheet->getHighestColumn(); // 最大列数
-        $highestColumnIndex = PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn);
+        $highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn);
 
         $data = [];
         for ($row = 1; $row <= $highestRow; $row++) {

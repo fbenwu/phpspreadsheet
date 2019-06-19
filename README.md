@@ -1,2 +1,63 @@
 # phpspreadshhet
 phpspreadshhet 读取，导出
+
+# 安装
+        composer require fan1992/phpspreadsheet
+# 实例化
+        use Fan1992\Phpspreadsheet\Sheet;
+        $sheet = new Sheet();
+        
+# 读取文档
+        $data = $sheet->read('./test.xlsx');
+        print_r($data);
+# 一次读取多个sheet
+        $sheet->sheetNames = ['data_a'=>'表1','data_b'=>'表2','data_c'=>'Sheet3'];
+        $data = $sheet->read('./test.xlsx');
+        print_r($data);
+        
+# 导出
+        $header = ['提提1', 'title2', '标题3', '测试测试']; //表头，即第一行
+        $data = [//具体数据，支持多维数组（合并单元格）
+            ['12', ['阿斯顿发','asdf','2019-06-19'], '是的', '沙箱'],
+            ['撒发顺丰的', ['1','23','撒旦法师'], '2019-06-19', 'asdasdfas']
+        ];
+        $width = [30,0,40,60]; //列宽度，为0或没有则自动适应
+        $sheet->export($data, $header,'test'.time(),null, 'mysheet', $width);
+# 导出多个sheet
+        $sheet1Data = [
+            'data'      => [
+                ['12', ['阿斯顿发', 'asdf', '2019-06-19'], '是的', '沙箱'],
+                ['asd', ['阿斯顿发', '22', '2019-06-19'], '是', '沙asdf箱'],
+            ],
+            'header'    => ['header1', '标题2', '333', '超级长超级长超级长超级长超级长超级长超级长的标题'],
+            'sheetName' => '1211sheet1',
+            'width'     => [5, 0, 5]
+        ];
+        $sheet2Data = [
+            'data'      => [
+                ['12', ['阿斯顿发', 'asdf', '2019-06-19'], '是的', '沙箱'],
+                ['asd', ['阿斯顿发', '22', '2019-06-19'], '是', '沙asdf箱'],
+            ],
+            'header'    => ['header1', '标题2', '333', '超级长超222222级长超级长超级长超级长超级长超级长的标题'],
+            'sheetName' => '',
+            'width'     => []
+        ];
+        $sheet3Data = [
+            'data'      => [
+                ['12', ['阿斯顿发', 'asdf', '2019-06-19'], '是的', '沙333箱'],
+                ['asd', ['阿斯顿发', '22', '2019-06-19'], '是3333', '沙asdf箱'],
+            ],
+            'header'    => ['header1', '标题2', '333', '超级长超级长超3333级长超级长超级长超级长超级长的标题'],
+            'sheetName' => '导出sheet3',
+            'width'     => []
+        ];
+        $data       = [$sheet1Data, $sheet2Data, $sheet3Data];
+        $sheet->mutiSheetExport($data, 'muti' . time(), Sheet::TYPE_XLSX);
+        
+# 其它参数
+        $readFirstLine = false;//是否读取首行
+        $down = true; //是否直接下载，false则保存文件在服务器上
+        
+#Others
+        其它请自行查阅代码
+        

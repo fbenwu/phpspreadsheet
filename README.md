@@ -54,10 +54,9 @@ phpspreadshhet 读取，导出
         $data       = [$sheet1Data, $sheet2Data, $sheet3Data];
         $sheet->mutiSheetExport($data, 'muti' . time(), Sheet::TYPE_XLSX);
         
-# 其它参数
+# 其它
         $readFirstLine = false;//是否读取首行
         $down = true; //是否直接下载，false则保存文件在服务器上
         
-#Others
-        其它请自行查阅代码
+        支持导出格式：xls，xlsx
         

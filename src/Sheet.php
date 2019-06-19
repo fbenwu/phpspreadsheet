@@ -7,13 +7,13 @@
  * 因为每次处理表格文档都要花时间去找文档
  * 干脆花时间自己整理一个常用的phpspreadsheet读取和导出操作的类
  */
+
 namespace Fan1992\Phpspreadsheet;
 
 class Sheet
 {
     const TYPE_XLS = 'xls'; // 导出类型 xls
     const TYPE_XLSX = 'xlsx'; // 导出类型 xlsx
-    const TYPE_CSV = 'csv'; // 导出类型 csv
 
     public $filePath;
     public $readFirstLine = false;//是否读取首行
@@ -44,7 +44,7 @@ class Sheet
      */
     public function export($data = [], $header = [], $fileName = 'example', $type = null, $sheetNmae = null, $width = [])
     {
-        if ($type && !in_array($type, [self::TYPE_CSV, self::TYPE_XLS, self::TYPE_XLSX])) {
+        if ($type && !in_array($type, [self::TYPE_XLS, self::TYPE_XLSX])) {
             throw new \Exception('不支持的导出格式');
         }
         $this->spreadsheets = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
@@ -69,7 +69,7 @@ class Sheet
      */
     public function mutiSheetExport($data, $fileName = 'example', $type = null)
     {
-        if ($type && !in_array($type, [self::TYPE_CSV, self::TYPE_XLS, self::TYPE_XLSX])) {
+        if ($type && !in_array($type, [self::TYPE_XLS, self::TYPE_XLSX])) {
             throw new \Exception('不支持的导出格式');
         }
         $this->spreadsheets = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
@@ -118,6 +118,7 @@ class Sheet
             $file = $savePath . '/' . $fileName . '.' . $ext;
             $this->writer->save($file);
         }
+        die();
     }
 
     /***
@@ -127,15 +128,11 @@ class Sheet
      */
     private function setOutputHeader($ext, $fileName)
     {
-        header("Content-Type: application/vnd.ms-excel; charset=UTF8");
-        header("Pragma: public");
-        header("Expires: 0");
+        header("Content-Type: application/vnd.ms-excel; charset=utf-8");
         header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
         header("Content-Type: application/force-download");
         header("Content-Type: application/octet-stream");
-        header("Content-Type: application/download");
         header("Content-Disposition: attachment;filename=" . $fileName . '.' . $ext);
-        header("Content-Transfer-Encoding: binary ");
     }
 
     /**
@@ -223,7 +220,7 @@ class Sheet
                     if ($rowspan > 1) {
                         $this->activesheet->mergeCellsByColumnAndRow($j, $currentRow, $j, intval($currentRow + $rowspan - 1));
                     }
-                    $this->activesheet->setCellValueByColumnAndRow($j, $currentRow, $value);
+                    $this->setCellValue($j, $currentRow, $value);
                     $this->setCellCenter($j, $currentRow);
                 } else {
                     $tem_column = $currentRow;
@@ -233,17 +230,17 @@ class Sheet
                                 if ($rows_division_arr[$k] > 1) {
                                     $this->activesheet->mergeCellsByColumnAndRow($j, $tem_column, $j, intval($tem_column + $rows_division_arr[$k] - 1));
                                 }
-                                $this->activesheet->setCellValueByColumnAndRow($j, $tem_column, $v);
+                                $this->setCellValue($j, $tem_column, $v);
                                 $this->setCellCenter($j, $tem_column);
                                 $tem_column += $rows_division_arr[$k];
                             } else {
-                                $this->activesheet->setCellValueByColumnAndRow($j, $tem_column, $v);
+                                $this->setCellValue($j, $tem_column, $v);
                                 $this->setCellCenter($j, $tem_column);
                                 $tem_column++;
                             }
                         } else {
                             foreach ($v as $vv) {
-                                $this->activesheet->setCellValueByColumnAndRow($j, $tem_column, $vv);
+                                $this->setCellValue($j, $tem_column, $vv);
                                 $this->setCellCenter($j, $tem_column);
                                 $tem_column++;
                             }
@@ -271,6 +268,17 @@ class Sheet
         $this->activesheet->getStyleByColumnAndRow($col, $row)->applyFromArray($styleArray);
     }
 
+    /**
+     * @param $col
+     * @param $row
+     * @param $value
+     * 设置单元格的值
+     */
+    private function setCellValue($col, $row, $value)
+    {
+        $this->activesheet->setCellValueByColumnAndRow($col, $row, $value);
+    }
+
     /***
      * @param $header
      * 设置active sheet 表头
@@ -278,7 +286,7 @@ class Sheet
     private function setActiveSheetHeader($header)
     {
         foreach ($header as $k => $v) {
-            $this->activesheet->setCellValueByColumnAndRow(intval($k + 1), 1, $v);
+            $this->setCellValue(intval($k + 1), 1, $v);
             $this->setCellCenter(intval($k + 1), 1);
         }
     }

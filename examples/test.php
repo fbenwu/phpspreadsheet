@@ -6,13 +6,16 @@
  * Time: 11:53
  */
 
-require_once '../vendor/autoload.php';
+namespace test;
+
+//require_once '../vendor/autoload.php';
 
 use Fan1992\Phpspreadsheet\Sheet;
 
+//require_once './../src/Sheet.php';
 $sheet = new Sheet();
 
-// 多sheet读取
+// 读取
 //$sheet->sheetNames = ['data_a'=>'表1','data_b'=>'表2','data_c'=>'Sheet3'];
 //$data = $sheet->read('./test.xlsx');
 //print_r($data);exit;
@@ -24,7 +27,7 @@ $sheet = new Sheet();
 //    ['撒发顺丰的', ['1','23','撒旦法师'], '2019-06-19', 'asdasdfas']
 //];
 //$width = [30,0,40,60];
-$sheet->export($data, $header,'test'.time(),Sheet::TYPE_XLSX, 'mysheet', $width);
+//$sheet->export($data, $header,'test'.time(),null, 'mysheet', $width);
 
 // 多sheet 导出
 $sheet1Data = [
@@ -55,4 +58,4 @@ $sheet3Data = [
     'width'     => []
 ];
 $data       = [$sheet1Data, $sheet2Data, $sheet3Data];
-$sheet->mutiSheetExport($data, 'muti' . time(),Sheet::TYPE_XLSX);
+$sheet->mutiSheetExport($data, 'muti' . time());

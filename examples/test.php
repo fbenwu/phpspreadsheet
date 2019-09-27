@@ -15,7 +15,7 @@ use Fan1992\Phpspreadsheet\Sheet;
 //require_once './../src/Sheet.php';
 $sheet = new Sheet();
 
-// 读取
+// 读取 
 //$sheet->sheetNames = ['data_a'=>'表1','data_b'=>'表2','data_c'=>'Sheet3'];
 //$data = $sheet->read('./test.xlsx');
 //print_r($data);exit;

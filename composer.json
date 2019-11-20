@@ -3,7 +3,7 @@
     "description": "phpspreadsheet",
     "type": "library",
     "require": {
-        "phpoffice/phpspreadsheet": "1.7"
+        "phpoffice/phpspreadsheet": "1.8.0"
     },
     "license": "MIT",
     "authors": [

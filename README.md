@@ -7,11 +7,16 @@ phpspreadshhet 读取，导出
         use Fan1992\Phpspreadsheet\Excel;
         $excel = new Excel();
         
-# 读取文档
+# 读取文档（默认只读取第一个sheet）
         $data = $excel->read('./test.xlsx');
         print_r($data);
 # 一次读取多个sheet
         $excel->sheetNames = ['data_a'=>'表1','data_b'=>'表2','data_c'=>'Sheet3'];
+        $data = $excel->read('./test.xlsx');
+        print_r($data);
+# 一次读取所有sheet
+        $excel = new Excel();
+        $excel->autoReadAllSheets = true;
         $data = $excel->read('./test.xlsx');
         print_r($data);
         

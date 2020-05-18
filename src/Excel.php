@@ -10,12 +10,14 @@
 
 namespace Fan1992\Phpspreadsheet;
 
+use yii\base\Exception;
+
 class Excel
 {
     const TYPE_XLS = 'xls'; // 导出类型 xls
     const TYPE_XLSX = 'xlsx'; // 导出类型 xlsx
 
-    public $filePath;
+    public $filePath;//文件路径
     public $readFirstLine = false;//是否读取首行
     public $down = true; //是否直接下载，false则保存文件在服务器上
     public $readDataOnly = true; // 不区分日期
@@ -115,9 +117,9 @@ class Excel
     }
 
     /***
-     * @param $fileName
-     * @param $ext
-     * @param null $savePath
+     * @param $fileName string
+     * @param $ext string
+     * @param $savePath string
      * 输出
      * 本地保存或浏览器下载
      */
@@ -136,8 +138,8 @@ class Excel
     }
 
     /***
-     * @param $ext
-     * @param $fileName
+     * @param $ext string
+     * @param $fileName string
      * 设置浏览器输出的响应头
      */
     private function setOutputHeader($ext, $fileName)
@@ -176,8 +178,8 @@ class Excel
     }
 
     /***
-     * @param $width
-     * 列宽
+     * @param $width array
+     * 列宽 数组，否则自适应宽度
      */
     private function setActiveSheetColumnWidth($width)
     {
@@ -194,8 +196,8 @@ class Excel
     }
 
     /***
-     * @param $data
-     * @param bool $hasHeader
+     * @param $data array
+     * @param $hasHeader boolean
      * 写入active sheet具体数据
      */
     private function setActiveSheetData($data, $hasHeader = true)
@@ -267,8 +269,8 @@ class Excel
     }
 
     /**
-     * @param $col
-     * @param $row
+     * @param $col integer 列
+     * @param $row integer 行
      * 设置单元格居中
      */
     private function setCellCenter($col, $row)
@@ -283,9 +285,9 @@ class Excel
     }
 
     /**
-     * @param $col
-     * @param $row
-     * @param $value
+     * @param $col integer
+     * @param $row integer
+     * @param $value string
      * 设置单元格的值
      */
     private function setCellValue($col, $row, $value)
@@ -294,7 +296,7 @@ class Excel
     }
 
     /***
-     * @param $header
+     * @param $header string
      * 设置active sheet 表头
      */
     private function setActiveSheetHeader($header)
@@ -306,8 +308,8 @@ class Excel
     }
 
     /***
-     * @param $type
-     * @throws Exception
+     * @param $type string
+     * @throws Exception Exception
      * 自动适配 Writer
      */
     private function setWriter($type)
@@ -325,9 +327,8 @@ class Excel
     }
 
     /***
-     * @param $file 文件名称，包含路径
+     * @param $file string 文件名称，包含路径
      * @return array
-     * @throws Exception
      * 读取表格文件，包括 xls，xlsx
      * 支持读一个文件里面的多个sheet
      */
@@ -398,7 +399,7 @@ class Excel
     }
 
     /***
-     * @param $type
+     * @param $type string
      * @return null|\PhpOffice\PhpSpreadsheet\Reader\Csv|\PhpOffice\PhpSpreadsheet\Reader\Ods|\PhpOffice\PhpSpreadsheet\Reader\Slk|\PhpOffice\PhpSpreadsheet\Reader\Xls|\PhpOffice\PhpSpreadsheet\Reader\Xlsx
      * @throws Exception
      * 根据文件后缀适配Reader

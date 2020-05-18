@@ -3,7 +3,7 @@ phpspreadshhet 读取，导出
 
 # 安装
         composer require fan1992/phpspreadsheet
-# 实例化
+# 使用示例
         use Fan1992\Phpspreadsheet\Excel;
         $excel = new Excel();
         

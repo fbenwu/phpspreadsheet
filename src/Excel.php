@@ -20,6 +20,7 @@ class Excel
     public $down = true; //是否直接下载，false则保存文件在服务器上
     public $readDataOnly = true; // 不区分日期
     public $sheetNames = null; // 需要读取的表格名
+    public $autoReadAllSheets = false; // 自动读取所有sheets的数据，此参数为true时，sheetNames参数无效
 
     private $spreadsheets = null; // 文档对象
     private $activesheet = null; //当前sheet
@@ -30,6 +31,19 @@ class Excel
     public function __construct()
     {
         set_time_limit(0); // 设置超时时间
+    }
+
+    /***
+     * 当设置autoReadAllSheets，自动读取所有sheet name并进行赋值
+     */
+    private function setAllSheetNames()
+    {
+        $sheetNames = $this->spreadsheets->getSheetNames();
+        $names = [];
+        array_map(function ($v) use (&$names) {
+            $names[$v] = $v;
+        }, $sheetNames);
+        $this->sheetNames = $names;
     }
 
     /***
@@ -328,13 +342,16 @@ class Excel
         $arr = pathinfo($file);
         $ext = $arr['extension'];
         $this->setReader($ext);
+        $this->spreadsheets = $this->reader->load($file);
+        if($this->autoReadAllSheets){
+            $this->setAllSheetNames();
+        }
         $this->reader->setReadDataOnly($this->readDataOnly);
         if (!$this->sheetNames) {
             $this->reader->setLoadAllSheets();
         } else {
             $this->reader->setLoadSheetsOnly($this->sheetNames);
         }
-        $this->spreadsheets = $this->reader->load($file);
 
         $data = [];
         if (!$this->sheetNames) {
